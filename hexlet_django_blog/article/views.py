@@ -1,6 +1,8 @@
 from django.shortcuts import render, get_object_or_404
 from django.views import View
 
+from .forms import ArticleCommentForm
+
 from hexlet_django_blog.article.models import Article
 
 
@@ -21,10 +23,17 @@ class ArticleView(View):
             'article': article,
         })
 
-# Для комментариев к статье
-# class ArticleCommentsView(View):
-#
-#     def get(self, request, *args, **kwargs):
-#         comment = get_object_or_404(Comment, id=kwargs['id'], article__id=kwargs['article_id'])
-#
-#         return render( ... )
+
+class ArticleCommentFormView(View):
+
+    def post(self, request, *args, **kwargs):
+        form = ArticleCommentForm(request.POST)  # Получаем данные формы из запроса
+        if form.is_valid():  # Проверяем данных формы на корректность
+            form.save()  # Сохраняем форму
+
+# Если хотим сделать проверку на спам:
+#        if form.is_valid(): # Проверяем данных формы на корректность
+#            comment = form.save(commit=False) # Получаем заполненную модель
+#            # Дополнительно обрабатываем модель
+#            comment.content = check_for_spam(form.data['content'])
+#            comment.save()

@@ -1,7 +1,8 @@
 from django.contrib import admin
 from django.contrib.admin import DateFieldListFilter
 
-from .models import Article
+from .models import *
+
 
 @admin.register(Article)
 class ArticleAdmin(admin.ModelAdmin):
