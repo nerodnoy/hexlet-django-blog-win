@@ -31,6 +31,7 @@ class ArticleCommentFormView(View):
         if form.is_valid():  # Проверяем данных формы на корректность
             form.save()  # Сохраняем форму
 
+
 # Если хотим сделать проверку на спам:
 #        if form.is_valid(): # Проверяем данных формы на корректность
 #            comment = form.save(commit=False) # Получаем заполненную модель
@@ -60,7 +61,7 @@ class ArticleFormEditView(View):
         article_id = kwargs.get('id')
         article = Article.objects.get(id=article_id)
         form = ArticleForm(instance=article)
-        return render(request, 'article/update.html', {'form': form, 'article_id':article_id})
+        return render(request, 'article/update.html', {'form': form, 'article_id': article_id})
 
     def post(self, request, *args, **kwargs):
         article_id = kwargs.get('id')
@@ -71,3 +72,13 @@ class ArticleFormEditView(View):
             return redirect('articles')
 
         return render(request, 'article/update.html', {'form': form, 'article_id': article_id})
+
+
+class ArticleFormDeleteView(View):
+
+    def post(self, request, *args, **kwargs):
+        article_id = kwargs.get('id')
+        article = Article.objects.get(id=article_id)
+        if article:
+            article.delete()
+        return redirect('articles')
